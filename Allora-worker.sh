@@ -9,6 +9,20 @@ fi
 # 脚本保存路径
 SCRIPT_PATH="$HOME/Allora-worker.sh"
 
+function check_port(){
+
+    ports=(1317 9090 26657 26658 6060 26656 26660)
+
+    for port in "${ports[@]}"
+    do
+        count=$(netstat -tuln | grep ":$port " | wc -l)
+        if [ $count -gt 1 ]; then
+            echo "端口 $port 存在冲突:"
+            netstat -tuln | grep ":$port "
+        fi
+    done
+}
+
 function install_node() {
   # Update and install required packages
   sudo apt update && sudo apt upgrade -y
@@ -245,6 +259,7 @@ function main_menu() {
     echo "3. 重启节点"
     echo "4. 备份节点钱包数据"
     echo "5. 卸载节点"
+    echo "6. 端口冲突检查(安装前请执行)"
     read -p "请输入选项（1-5）: " OPTION
 
     case $OPTION in
@@ -253,6 +268,7 @@ function main_menu() {
     3) restart ;;
     4) backup ;;
     5) uninstall ;;
+    6) check_port ;;
     *)
         echo "无效选项。"
         read -p "按任意键返回主菜单..."
