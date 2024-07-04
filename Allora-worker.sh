@@ -70,9 +70,9 @@ function install_node() {
 
   # Wallet setup
   echo "Choose an option: "
-  echo "1. Use existing wallet"
-  echo "2. Create new wallet"
-  read -p "Enter option number: " option
+  echo "1. 使用已有钱包(24位助记词)"
+  echo "2. 生成新钱包"
+  read -p "请输入你的选择: " option
 
   if [ "$option" == "1" ]; then
       read -p "Enter your seed phrases: " seed_phrase
@@ -238,16 +238,52 @@ function restart(){
   docker-compose down
   docker-compose up -d
   docker-compose logs -f
-  docker-compose logs -f
 }
 
 function uninstall(){
-  rm -rf $HOME/basic-coin-prediction-node
-  echo "节点卸载完成······"
+      # 停止并删除镜像：basic-coin-prediction-node-worker
+    docker stop $(docker ps -a -q --filter ancestor=basic-coin-prediction-node-worker)
+    docker rm $(docker ps -a -q --filter ancestor=basic-coin-prediction-node-worker)
+    
+    # 停止并删除镜像：basic-coin-prediction-node-updater
+    docker stop $(docker ps -a -q --filter ancestor=basic-coin-prediction-node-updater)
+    docker rm $(docker ps -a -q --filter ancestor=basic-coin-prediction-node-updater)
+    
+    # 停止并删除镜像：basic-coin-prediction-node-inference
+    docker stop $(docker ps -a -q --filter ancestor=basic-coin-prediction-node-inference)
+    docker rm $(docker ps -a -q --filter ancestor=basic-coin-prediction-node-inference)
+    
+    # 停止并删除镜像：alloranetwork/allora-inference-base-head:latest
+    docker stop $(docker ps -a -q --filter ancestor=alloranetwork/allora-inference-base-head:latest)
+    docker rm $(docker ps -a -q --filter ancestor=alloranetwork/allora-inference-base-head:latest)
+    
+    # 停止并删除镜像：alloranetwork/allora-inference-base:latest (exciting_tesla)
+    docker stop $(docker ps -a -q --filter ancestor=alloranetwork/allora-inference-base:latest)
+    docker rm $(docker ps -a -q --filter ancestor=alloranetwork/allora-inference-base:latest)
+    
+    # 停止并删除镜像：alloranetwork/allora-inference-base:latest (quirky_grothendieck)
+    docker stop $(docker ps -a -q --filter ancestor=alloranetwork/allora-inference-base:latest)
+    docker rm $(docker ps -a -q --filter ancestor=alloranetwork/allora-inference-base:latest)
+    
+    rm -rf $HOME/basic-coin-prediction-node $HOME/allora-chain $HOME/.allorad
+    
+    echo "节点卸载完成······"
 }
 
 function backup(){
-  2
+
+    source_file="$HOME/basic-coin-prediction-node/docker-compose.yml"
+    target_folder="$HOME/allora_key"
+    
+    # 检查目标文件夹是否存在，不存在则创建
+    if [ ! -d "$target_folder" ]; then
+        mkdir -p "$target_folder"
+    fi
+    
+    # 备份文件到目标文件夹
+    cp "$source_file" "$target_folder"
+    
+    echo "已备份到目标文件夹 $target_folder 中(节点的助记词在文件中)"
 
 }
 # 主菜单
