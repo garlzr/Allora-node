@@ -13,14 +13,21 @@ function check_port(){
 
     ports=(1317 9090 26657 26658 6060 26656 26660)
 
+    conflict=false
+
     for port in "${ports[@]}"
     do
         count=$(netstat -tuln | grep ":$port " | wc -l)
         if [ $count -gt 1 ]; then
             echo "端口 $port 存在冲突:"
             netstat -tuln | grep ":$port "
+            conflict=true
         fi
     done
+
+    if [ "$conflict" = false ]; then
+        echo "端口未冲突，请开始安装工人节点"
+    fi
 }
 
 function install_node() {
