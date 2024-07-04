@@ -291,6 +291,31 @@ function backup(){
     echo "已备份到目标文件夹 $target_folder 中(节点的助记词在文件中)"
 
 }
+
+function status(){
+      curl --location 'http://localhost:6000/api/v1/functions/execute' \
+    --header 'Content-Type: application/json' \
+    --data '{
+        "function_id": "bafybeigpiwl3o73zvvl6dxdqu7zqcub5mhg65jiky2xqb4rdhfmikswzqm",
+        "method": "allora-inference-function.wasm",
+        "parameters": null,
+        "topic": "1",
+        "config": {
+            "env_vars": [
+                {
+                    "name": "BLS_REQUEST_PATH",
+                    "value": "/api"
+                },
+                {
+                    "name": "ALLORA_ARG_PARAMS",
+                    "value": "ETH"
+                }
+            ],
+            "number_of_nodes": -1,
+            "timeout": 2
+        }
+    }'
+}
 # 主菜单
 function main_menu() {
     clear
@@ -303,7 +328,8 @@ function main_menu() {
     echo "4. 备份节点钱包数据"
     echo "5. 卸载节点"
     echo "6. 端口冲突检查(安装前请执行)"
-    read -p "请输入选项（1-5）: " OPTION
+    echo "7. 节点运行情况查询({"code":"200","request_id":xxxxxxxxxxx}即为运行正常)"
+    read -p "请输入选项（1-7）: " OPTION
 
     case $OPTION in
     1) install_node ;;
@@ -312,6 +338,7 @@ function main_menu() {
     4) backup ;;
     5) uninstall ;;
     6) check_port ;;
+    7) status ;;
     *)
         echo "无效选项。"
         read -p "按任意键返回主菜单..."
