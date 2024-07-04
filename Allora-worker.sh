@@ -232,19 +232,19 @@ EOF
 
   docker-compose build
   docker-compose up -d
-  docker-compose logs -f
+  docker-compose logs -f --tail 20
 }
 
 function check_service_status(){
   cd $HOME/basic-coin-prediction-node
-  docker-compose logs -f
+  docker-compose logs -f --tail 20
 }
 
 function restart(){
   cd $HOME/basic-coin-prediction-node
   docker-compose down
   docker-compose up -d
-  docker-compose logs -f
+  docker-compose logs -f --tail 20
 }
 
 function uninstall(){
