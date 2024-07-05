@@ -11,6 +11,11 @@ SCRIPT_PATH="$HOME/Allora-worker.sh"
 
 function check_port(){
 
+    if ! command -v netstat &> /dev/null; then
+    sudo apt-get update
+    sudo apt-get install net-tools
+    fi
+
     ports=(1317 9090 26657 26658 6060 26656 26660)
 
     conflict=false
@@ -33,7 +38,7 @@ function check_port(){
 function install_node() {
   # Update and install required packages
   sudo apt update && sudo apt upgrade -y
-  sudo apt-get install net-tools
+  
   # Check and install required packages
   packages=(ca-certificates zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev curl git wget make jq build-essential pkg-config lsb-release libssl-dev libreadline-dev libffi-dev gcc screen unzip lz4)
   for package in "${packages[@]}"; do
