@@ -100,8 +100,8 @@ function install_node() {
   cat head-data/keys/identity
   echo
 
-  read -p "Re-enter your head-id: " head_id
-  read -p "Enter your wallet seed phrases: " wallet_seed
+  read -p "Re-enter your head-id(复制上方head-id): " head_id
+  read -p "Enter your wallet seed phrases(填写24位钱包助记词): " wallet_seed
 
   cat <<EOF > docker-compose.yml
   version: '3'
