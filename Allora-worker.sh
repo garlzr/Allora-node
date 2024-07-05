@@ -323,7 +323,7 @@ function main_menu() {
     echo "安装完成后请前往Allora Points 仪表板中登录Keplr钱包账户 https://app.allora.network/points/overview"
     echo "在安装节点过程中，生成新钱包后请记录地址和助记词----前往领水----保证后续安装过程中，第二次填写助记词时钱包有水"
     echo "请选择要执行的操作:"
-    echo "1. 安装节点(先执行7查询 如果冲突了需要单独处理)"
+    echo "1. 安装节点(先执行6查询 如果冲突了需要单独处理)"
     echo "2. 查看节点日志"
     echo "3. 重启节点"
     echo "4. 备份节点钱包数据"
