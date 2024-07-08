@@ -324,7 +324,7 @@ function status(){
 # 主菜单
 function main_menu() {
     clear
-    echo "领水网站 https://faucet.edgenet.allora.network/"
+    echo "领水网站 https://faucet.testnet.allora.network/"
     echo "安装完成后请前往Allora Points 仪表板中登录Keplr钱包账户 https://app.allora.network/points/overview"
     echo "在安装节点过程中，生成新钱包后请记录地址和助记词----前往领水----保证后续安装过程中，第二次填写助记词时钱包有水"
     echo "请选择要执行的操作:"
