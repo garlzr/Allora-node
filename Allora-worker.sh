@@ -85,6 +85,7 @@ function install_node() {
       allorad keys add testkey --recover <<< "$seed_phrase"
   else
       allorad keys add testkey
+  fi
 
   # Clone and set up the prediction node
   cd $HOME
