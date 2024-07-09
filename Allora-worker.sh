@@ -248,29 +248,20 @@ function restart() {
 }
 
 function uninstall(){
-      # 停止并删除镜像：basic-coin-prediction-node-worker
-    docker stop $(docker ps -a -q --filter ancestor=basic-coin-prediction-node-worker)
-    docker rm $(docker ps -a -q --filter ancestor=basic-coin-prediction-node-worker)
-
-    # 停止并删除镜像：basic-coin-prediction-node-updater
-    docker stop $(docker ps -a -q --filter ancestor=basic-coin-prediction-node-updater)
-    docker rm $(docker ps -a -q --filter ancestor=basic-coin-prediction-node-updater)
-
-    # 停止并删除镜像：basic-coin-prediction-node-inference
-    docker stop $(docker ps -a -q --filter ancestor=basic-coin-prediction-node-inference)
-    docker rm $(docker ps -a -q --filter ancestor=basic-coin-prediction-node-inference)
-
-    # 停止并删除镜像：alloranetwork/allora-inference-base-head:latest
-    docker stop $(docker ps -a -q --filter ancestor=alloranetwork/allora-inference-base-head:latest)
-    docker rm $(docker ps -a -q --filter ancestor=alloranetwork/allora-inference-base-head:latest)
-
-    # 停止并删除镜像：alloranetwork/allora-inference-base:latest (exciting_tesla)
-    docker stop $(docker ps -a -q --filter ancestor=alloranetwork/allora-inference-base:latest)
-    docker rm $(docker ps -a -q --filter ancestor=alloranetwork/allora-inference-base:latest)
-
-    # 停止并删除镜像：alloranetwork/allora-inference-base:latest (quirky_grothendieck)
-    docker stop $(docker ps -a -q --filter ancestor=alloranetwork/allora-inference-base:latest)
-    docker rm $(docker ps -a -q --filter ancestor=alloranetwork/allora-inference-base:latest)
+    # 定义需要删除的镜像列表
+    images=(
+        "basic-coin-prediction-node-worker"
+        "basic-coin-prediction-node-updater"
+        "basic-coin-prediction-node-inference"
+        "alloranetwork/allora-inference-base-head:latest"
+        "alloranetwork/allora-inference-base:latest"
+    )
+    
+    # 遍历镜像列表并删除相应的容器
+    for image in "${images[@]}"; do
+        # 删除容器
+        docker rm $(docker ps -a -q --filter ancestor=$image) 2>/dev/null
+    done
 
     rm -rf $HOME/basic-coin-prediction-node $HOME/allora-chain $HOME/.allorad
 
