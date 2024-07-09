@@ -248,21 +248,33 @@ function restart() {
 }
 
 function uninstall(){
-    # 定义需要删除的镜像列表
+   # 定义需要删除的镜像列表
     images=(
-        "basic-coin-prediction-node-worker"
-        "basic-coin-prediction-node-updater"
-        "basic-coin-prediction-node-inference"
+        "basic-coin-prediction-node_worker"
+        "basic-coin-prediction-node_updater"
+        "basic-coin-prediction-node_inference"
         "alloranetwork/allora-inference-base-head:latest"
         "alloranetwork/allora-inference-base:latest"
     )
-    
-    # 遍历镜像列表并删除相应的容器
+
+    # 停止并删除相应的容器
     for image in "${images[@]}"; do
-        # 删除容器
-        docker rm $(docker ps -a -q --filter ancestor=$image) 2>/dev/null
+        # 获取运行该镜像的所有容器ID
+        container_ids=$(docker ps -a -q --filter ancestor=$image)
+        
+        # 停止并删除容器
+        if [ -n "$container_ids" ]; then
+            docker stop $container_ids 2>/dev/null
+            docker rm $container_ids 2>/dev/null
+        fi
     done
 
+    # 删除镜像
+    for image in "${images[@]}"; do
+        docker rmi $image 2>/dev/null
+    done
+
+    # 删除相关文件和目录
     rm -rf $HOME/basic-coin-prediction-node $HOME/allora-chain $HOME/.allorad
 
     echo "节点卸载完成······"
