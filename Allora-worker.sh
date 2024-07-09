@@ -39,12 +39,8 @@ function install_node() {
   # Update and install required packages
   sudo apt update && sudo apt upgrade -y
 
-  # Check and install required packages
-  packages=(ca-certificates zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev curl git wget make jq build-essential pkg-config lsb-release libssl-dev libreadline-dev libffi-dev gcc screen unzip lz4)
-  for package in "${packages[@]}"; do
-    dpkg -s $package &>/dev/null || sudo apt install -y $package
-  done
-
+  sudo apt install -y ca-certificates zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev curl git wget make jq build-essential pkg-config lsb-release libssl-dev libreadline-dev libffi-dev gcc screen unzip lz4
+  
   # Install Python
   dpkg -s python3 &>/dev/null || sudo apt install -y python3
   dpkg -s python3-pip &>/dev/null || sudo apt install -y python3-pip
@@ -89,7 +85,6 @@ function install_node() {
       allorad keys add testkey --recover <<< "$seed_phrase"
   else
       allorad keys add testkey
-  fi
 
   # Clone and set up the prediction node
   cd $HOME
