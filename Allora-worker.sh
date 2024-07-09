@@ -82,13 +82,12 @@ function install_node() {
     
   if [ "$option" == "1" ]; then
       read -p "Enter your seed phrases: " seed_phrase
-      allorad keys add testkey --recover <<< "$seed_phrase"
+      allorad keys add testkey --recover --keyring-backend file <<< "$seed_phrase"
   else
       allorad keys add testkey
   fi
 
   # Clone and set up the prediction node
-  sleep 20
   cd $HOME
   git clone https://github.com/allora-network/basic-coin-prediction-node
   cd basic-coin-prediction-node
