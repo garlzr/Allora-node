@@ -79,7 +79,7 @@ function install_node() {
   echo "1. 使用已有钱包(24位助记词)"
   echo "2. 生成新钱包【建议用脚本生成的钱包 请记录助记词和地址】"
   read -p "请输入你的选择: " option
-
+    
   if [ "$option" == "1" ]; then
       read -p "Enter your seed phrases: " seed_phrase
       allorad keys add testkey --recover <<< "$seed_phrase"
@@ -88,6 +88,7 @@ function install_node() {
   fi
 
   # Clone and set up the prediction node
+  sleep 20
   cd $HOME
   git clone https://github.com/allora-network/basic-coin-prediction-node
   cd basic-coin-prediction-node
