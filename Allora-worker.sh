@@ -309,6 +309,15 @@ function status(){
         }
     }'
 }
+
+function wallet(){
+    allorad keys list
+}
+
+function add(){
+    allorad keys add testkey --recover
+}
+
 # 主菜单
 function main_menu() {
     clear
@@ -323,7 +332,9 @@ function main_menu() {
     echo "5. 卸载节点"
     echo "6. 端口冲突检查(安装前请执行)"
     echo "7. 节点运行情况查询({"code":"200","request_id":xxxxxxxxxxx}即为运行正常)"
-    read -p "请输入选项（1-7）: " OPTION
+    echo "8. 钱包查询"
+    echo "9. 导入钱包"
+    read -p "请输入选项（1-9）: " OPTION
 
     case $OPTION in
     1) install_node ;;
@@ -333,6 +344,8 @@ function main_menu() {
     5) uninstall ;;
     6) check_port ;;
     7) status ;;
+    8) wallet ;;
+    9) add ;;
     *)
         echo "无效选项。"
         read -p "按任意键返回主菜单..."
