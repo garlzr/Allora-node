@@ -38,7 +38,7 @@ function check_port(){
 function install_node() {
   # Update and install required packages
   sudo apt update && sudo apt upgrade -y
-  
+
   # Check and install required packages
   packages=(ca-certificates zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev curl git wget make jq build-essential pkg-config lsb-release libssl-dev libreadline-dev libffi-dev gcc screen unzip lz4)
   for package in "${packages[@]}"; do
@@ -95,7 +95,7 @@ function install_node() {
   cd $HOME
   git clone https://github.com/allora-network/basic-coin-prediction-node
   cd basic-coin-prediction-node
-  mkdir -p worker-data head-data
+  mkdir worker-data head-data
   sudo chmod -R 777 worker-data head-data
 
   sudo docker run -it --entrypoint=bash -v $(pwd)/head-data:/data alloranetwork/allora-inference-base:latest -c "mkdir -p /data/keys && (cd /data/keys && allora-keys)"
@@ -126,7 +126,7 @@ function install_node() {
       healthcheck:
         test: ["CMD", "curl", "-f", "http://localhost:8000/inference/ETH"]
         interval: 10s
-        timeout: 5s
+        timeout: 10s
         retries: 12
       volumes:
         - ./inference-data:/app/data
@@ -233,8 +233,9 @@ function install_node() {
     head-data:
 EOF
 
-  docker-compose build
+  docker-compose up --restart=always --build
   docker-compose up -d
+  docker update --restart=always worker-basic-eth-pred && docker update --restart=always updater-basic-eth-pred && docker update --restart=always inference-basic-eth-pred && docker update --restart=always head-basic-eth-pred
   docker-compose logs -f --tail 20
 }
 
@@ -254,29 +255,29 @@ function uninstall(){
       # 停止并删除镜像：basic-coin-prediction-node-worker
     docker stop $(docker ps -a -q --filter ancestor=basic-coin-prediction-node-worker)
     docker rm $(docker ps -a -q --filter ancestor=basic-coin-prediction-node-worker)
-    
+
     # 停止并删除镜像：basic-coin-prediction-node-updater
     docker stop $(docker ps -a -q --filter ancestor=basic-coin-prediction-node-updater)
     docker rm $(docker ps -a -q --filter ancestor=basic-coin-prediction-node-updater)
-    
+
     # 停止并删除镜像：basic-coin-prediction-node-inference
     docker stop $(docker ps -a -q --filter ancestor=basic-coin-prediction-node-inference)
     docker rm $(docker ps -a -q --filter ancestor=basic-coin-prediction-node-inference)
-    
+
     # 停止并删除镜像：alloranetwork/allora-inference-base-head:latest
     docker stop $(docker ps -a -q --filter ancestor=alloranetwork/allora-inference-base-head:latest)
     docker rm $(docker ps -a -q --filter ancestor=alloranetwork/allora-inference-base-head:latest)
-    
+
     # 停止并删除镜像：alloranetwork/allora-inference-base:latest (exciting_tesla)
     docker stop $(docker ps -a -q --filter ancestor=alloranetwork/allora-inference-base:latest)
     docker rm $(docker ps -a -q --filter ancestor=alloranetwork/allora-inference-base:latest)
-    
+
     # 停止并删除镜像：alloranetwork/allora-inference-base:latest (quirky_grothendieck)
     docker stop $(docker ps -a -q --filter ancestor=alloranetwork/allora-inference-base:latest)
     docker rm $(docker ps -a -q --filter ancestor=alloranetwork/allora-inference-base:latest)
-    
+
     rm -rf $HOME/basic-coin-prediction-node $HOME/allora-chain $HOME/.allorad
-    
+
     echo "节点卸载完成······"
 }
 
@@ -284,15 +285,15 @@ function backup(){
 
     source_file="$HOME/basic-coin-prediction-node/docker-compose.yml"
     target_folder="$HOME/allora_key"
-    
+
     # 检查目标文件夹是否存在，不存在则创建
     if [ ! -d "$target_folder" ]; then
         mkdir -p "$target_folder"
     fi
-    
+
     # 备份文件到目标文件夹
     cp "$source_file" "$target_folder"
-    
+
     echo "已备份到目标文件夹 $target_folder 中(节点的助记词在文件中)"
 
 }
@@ -324,7 +325,7 @@ function status(){
 # 主菜单
 function main_menu() {
     clear
-    echo "领水网站 https://faucet.testnet.allora.network/"
+    echo "领水网站 https://faucet.edgenet.allora.network/"
     echo "安装完成后请前往Allora Points 仪表板中登录Keplr钱包账户 https://app.allora.network/points/overview"
     echo "在安装节点过程中，生成新钱包后请记录地址和助记词----前往领水----保证后续安装过程中，第二次填写助记词时钱包有水"
     echo "请选择要执行的操作:"
