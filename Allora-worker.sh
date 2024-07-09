@@ -235,12 +235,12 @@ EOF
   docker-compose logs -f --tail 20
 }
 
-function check_service_status(){
+function check_service_status() {
   cd $HOME/basic-coin-prediction-node
   docker-compose logs -f --tail 20
 }
 
-function restart(){
+function restart() {
   cd $HOME/basic-coin-prediction-node
   docker-compose down
   docker-compose up -d
