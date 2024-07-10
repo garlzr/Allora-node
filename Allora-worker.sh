@@ -81,8 +81,8 @@ function install_node() {
   read -p "请输入你的选择: " option
     
   if [ "$option" == "1" ]; then
-      read -p "Enter your seed phrases: " seed_phrase
-      allorad keys add testkey --recover --keyring-backend file <<< "$seed_phrase"
+      echo "Enter your seed phrases: "
+      allorad keys add testkey --recover
   else
       allorad keys add testkey
   fi
